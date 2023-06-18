@@ -49,7 +49,7 @@ async def get_transcription():
             return 'No audio file found', 400
         
         audio = request.files['audio']
-        audio.save('./temp_file/audio.mp3')
+        audio.save("./temp_file/audio.mp3")
         
 
         audio_file= open("./temp_file/audio.mp3", "rb")
