@@ -170,7 +170,7 @@ function sendAudio(audioBlob) {
     .then((response) => response.json())
     .then((message) => {
       // Handle the response from the server
-      console.log(message);
+      console.log(message.response);
     })
     .catch((error) => {
       // Handle any errors that occurred during the request

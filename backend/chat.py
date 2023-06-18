@@ -1,13 +1,18 @@
 import openai
 import numpy as np
 import re
+import os
+import json
+from datetime import datetime
+
+day = 18
 
 openai.api_key = "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"
 
 SYSTEM_INSTUCTIONS = """You are a emotion journal AI assistant.
 Your goal is to give the user advice on their issues and help them get into a better mental state.
-You will be apologetic in the first sentence if the user is dealing with an issue.
-Your responses will be 1-5 sentences and your last sentence will be the advice to give the user.
+You will congratulate the user if the user having a positive mental state unless the user is dealing with an issue or hardship, then you will be apologetic in the first sentence.
+Your responses will be 1-5 sentences and give advice or assistance to help the user keep a positive mental attitude.
 """
 
 EMOTIONS = np.array([
@@ -78,10 +83,17 @@ def store_emotions(result):
 def message(transcription):
     global emotion_history
     user_sorted_values = process_prediction(emotion_history)
-
     user_emotions = find_emotion(user_sorted_values)
     print(user_emotions[0:3])
 
+    # Load past conversation
+    #if os.path.exists("./conversation.json"):
+    #    with open("./conversation.json", "r") as file:
+    #        conversation = json.load(file)
+    #        print("Conversation loaded")
+    #else:
+    #    conversation = []
+    #    print("Conversation file not found. Starting with an empty conversation.")
 
     
     message = create_message(transcription, user_emotions)
@@ -93,6 +105,73 @@ def message(transcription):
     response = re.sub(r'\([^)]*\)', '', response)
     response = re.sub(r'\[.*?\]', '', response)
     response = re.sub(r'^"|"$', '', response)
+    print(response)
     emotion_history = []
+
+
+    # Save conversation
+    #with open("conversation.json", "w") as file:
+    #    json.dump(conversation, file)
+    #    print("Conversation saved to conversation.json")
+
+    # save data in a jason file
+    print("???????")
+    
+    print(user_sorted_values[0][0])
+    convert_data(user_sorted_values[0][0], response)
     
     return response
+
+
+
+
+def convert_data(emotion, response):
+    global day
+    print(emotion)
+    exist = True
+    if os.path.exists("../my-app/src/pages/data.json"):
+        with open("../my-app/src/pages/data.json", "r") as file:
+            json_data = json.load(file)
+            print("json_data loaded")
+    else:
+        json_data = [{}]
+        exist = False
+        print("json_data file not found. Starting with an empty json.")
+        if not os.path.exists("../my-app/src/pages"):
+            print("problem here")
+
+    #current_date = datetime.now()
+    print("trying to save 1")
+    formatted_date = "06-" + str(day) + "-2023"
+    day += 1
+    #formatted_date = current_date.strftime('%m-%d-%Y')
+    print("trying to save 2")
+    print(emotion)
+    color = get_color(emotion)
+    print("trying to save 3")
+    new_data = {
+        formatted_date: [color, response],
+    }
+    
+    print("trying to save 5")
+
+    if exist:
+        json_data.append(new_data)
+    else:
+        json_data = [new_data]
+
+    print("trying to save")
+    with open("../my-app/src/pages/data.json", 'w') as file:
+        json.dump(json_data, file)
+        print("json_data saved")
+
+def get_color(emotion):
+    color_value = {
+        "admiring" : "white", "adoring" : "pink", "appreciative" : "white", "amused" : "yellow", "angry" : "red", "anxious"  : "purple", "awestruck" : "lightblue", "uncomfortable" : "white", "bored" : "brown", "calm" : "lightblue",
+        "focused" : "white", "contemplative" : "white", "confused" : "orange", "contemptuous" : "white", "content" : "white", "hungry" : "white", "determined" : "white", "disappointed" : "white",
+        "disgusted" : "green", "distressed" : "white", "doubtful" : "tan", "euphoric" : "white", "embarrassed" : "white", "disturbed" : "white", "entranced" : "white", "envious" : "white", "excited" : "white",
+        "fearful" : "lightpurple", "guilty" : "white", "horrified" : "white", "interested" : "white", "happy" : "white", "enamored" : "white", "nostalgic" : "white", "pained" : "maroon", "proud" : "white", "inspired" : "white",
+        "relieved" : "white", "smitten" : "white", "sad" : "darkblue", "satisfied" : "white", "desirous" : "white", "ashamed" : "white", "negatively surprised" : "green", "positively surprised" : "white",
+        "sympathetic" : "white", "tired" : "black", "triumphant" : "white"
+    }
+    return color_value[emotion]
