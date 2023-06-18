@@ -8,7 +8,7 @@ const Navbar = () => {
 			<Nav>
 				<NavMenu>
 					<NavLink to="/" activeStyle>
-						I hate Emily
+						Home
 					</NavLink>
 					<NavLink to="/about" activeStyle>
 						About
