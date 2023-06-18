@@ -81,6 +81,7 @@ def message(transcription):
 
     user_emotions = find_emotion(user_sorted_values)
 
+    
 
     message = create_message(transcription, user_emotions)
     conversation.append({"role": "user", "content": message})

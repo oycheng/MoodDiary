@@ -52,7 +52,6 @@ async def webcam_loop():
                         cv2.imwrite(TEMP_FILE, frame)
                         result = await socket.send_file(TEMP_FILE)
                         print(result)
-                        store_emotions(result)
                         print("emotions stored:")
                         await asyncio.sleep(3)
         except websockets.exceptions.ConnectionClosedError:
