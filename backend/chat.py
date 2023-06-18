@@ -7,7 +7,7 @@ from datetime import datetime
 
 day = 18
 
-openai.api_key = "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"
+openai.api_key = ""
 
 SYSTEM_INSTUCTIONS = """You are a emotion journal AI assistant.
 Your goal is to give the user advice on their issues and help them get into a better mental state.
@@ -141,22 +141,18 @@ def convert_data(emotion, response):
             print("problem here")
 
     #current_date = datetime.now()
-    print("trying to save 1")
     formatted_date = "06-" + str(day) + "-2023"
     day += 1
     #formatted_date = current_date.strftime('%m-%d-%Y')
-    print("trying to save 2")
     print(emotion)
     color = get_color(emotion)
-    print("trying to save 3")
     new_data = {
         formatted_date: [color, response],
     }
     
-    print("trying to save 5")
 
     if exist:
-        json_data.append(new_data)
+        json_data.update(new_data)
     else:
         json_data = [new_data]
 

@@ -9,8 +9,8 @@ import cv2
 import traceback
 
 
-HUME_API_KEY = "ad0LmsBJyv0WpfTi8GSkvrhH4ryFLcqK2YJHH9KG6pDtzMfz"
-openai.api_key = "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"
+HUME_API_KEY = ""
+openai.api_key = ""
 
 bp = Blueprint('chat', __name__)
 
@@ -49,7 +49,7 @@ async def get_transcription():
             return 'No audio file found', 400
         
         audio = request.files['audio']
-        audio.save('./temp_file/audio.mp3')
+        audio.save("./temp_file/audio.mp3")
         
 
         audio_file= open("./temp_file/audio.mp3", "rb")
