@@ -1,12 +1,21 @@
 import React from 'react';
 import '../global.css';
+import '../pages/calendar.css';
+import { useState } from 'react';
+import Calendar from 'react-calendar';
 
 
-const Calendar = () => {
+const Calendr = () => {
+	const [date, setDate] = useState(new Date());
+
 	return (
-		<h1>MAKE A CALENDAR HERE</h1>
+		<div>
+		<h2>Mood Board</h2>
+		<div className='calendar-container'>
+        	<Calendar onChange={setDate} value={date} />
+      	</div>
+	  </div>
 	);
 };
 
-export default Calendar;
-
+export default Calendr;
