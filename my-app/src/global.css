@@ -5,6 +5,39 @@
 	background: none;
 
 }
+
+/* global css variables */
+@media (prefers-color-scheme: light) {
+    html {
+		--admiring: white;
+		--adoring: pink;
+		--appreciative: white; 
+		--amused: yellow;
+		--angry: red;
+		--anxious: purple;
+		--awestruck: light blue;
+		--uncomfortable: white;  
+		--bored: brown;
+		--calm: light blue;
+    	--focused: white;  
+		--contemplative: white; 
+		--confused: orange; 
+		--contemptuous: white; 
+		--content-hungry-determined-disappointed-distressed-euphoric-embarrassed-disturbed-entranced-envious-excited-guilty-horrified-interested-happy-enamored-nostalgic-proud-inspired-relieved-smitten-satisfied-desirous-ashamed-positivelysurprised-sympathetic-triumphant: white;
+    	--disgusted: green; 
+		--doubtful: #bd975b; 
+    	--fearful: #a434eb;
+		 
+		--pained: maroon;  
+		--sad: dark blue; 
+		--negatively-surprised: green;
+		
+		--tired: black; 
+        --primary: #E84D28;
+        
+    }
+}
+
 h1{
 	padding-top: 200px;
 	font-size: 5rem;
