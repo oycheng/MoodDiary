@@ -81,13 +81,13 @@ text-decoration: none;
 }
 
 .react-calendar .blue {
-    background-color: blue;
+    background-color: lightblue;
 }
 
 .react-calendar .red {
-    background-color: red;
+    background-color: lightseagreen;
 }
 
 .react-calendar .yellow{
-    background-color: yellow;
+    background-color: lightcoral;
 }

@@ -7,8 +7,6 @@ import asyncio
 import threading
 import cv2
 import traceback
-import json
-from datetime import datetime
 
 
 HUME_API_KEY = "ad0LmsBJyv0WpfTi8GSkvrhH4ryFLcqK2YJHH9KG6pDtzMfz"
@@ -60,7 +58,7 @@ async def get_transcription():
         response = message(transcription["text"])
         print(response)
         
-        return jsonify(response)
+        return jsonify(response=response)
     # exception
     except KeyError as e:
         # Handle missing field error
@@ -69,32 +67,6 @@ async def get_transcription():
         # Handle other exceptions
         return f'Internal server error: {e}', 500
     
-
-def convert_data(emotion, response, transcription):
-    with open('data.json', 'r') as file:
-        json_data = json.load(file)
-    current_date = datetime.now()
-    formatted_date = current_date.strftime('%m-%d-%Y')
-    color = get_color(emotion)
-    new_data = {
-        formatted_date : [color, transcription, response],
-    }
-    json_data.append(new_data)
-    
-    with open('data.json', 'w') as file:
-        json.dump(json_data, file)
-
-def get_color(emotion):
-    color_value = {
-        "admiring" : "white", "adoring" : "pink", "appreciative" : "white", "amused" : "yellow", "angry" : "red", "anxious"  : "purple", "awestruck" : "lightblue", "uncomfortable" : "white", "bored" : "brown", "calm" : "lightblue",
-        "focused" : "white", "contemplative" : "white", "confused" : "orange", "contemptuous" : "white", "content" : "white", "hungry" : "white", "determined" : "white", "disappointed" : "white",
-        "disgusted" : "green", "distressed" : "white", "doubtful" : "tan", "euphoric" : "white", "embarrassed" : "white", "disturbed" : "white", "entranced" : "white", "envious" : "white", "excited" : "white",
-        "fearful" : "lightpurple", "guilty" : "white", "horrified" : "white", "interested" : "white", "happy" : "white", "enamored" : "white", "nostalgic" : "white", "pained" : "maroon", "proud" : "white", "inspired" : "white",
-        "relieved" : "white", "smitten" : "white", "sad" : "darkblue", "satisfied" : "white", "desirous" : "white", "ashamed" : "white", "negatively surprised" : "green", "positively surprised" : "white",
-        "sympathetic" : "white", "tired" : "black", "triumphant" : "white"
-    }
-    return color_value[emotion]
-
 @bp.route('/start', methods=['POST'])
 async def start_processing():
     try:
@@ -134,6 +106,7 @@ async def webcam_loop():
         webcam_event.clear()
         client = HumeStreamClient(HUME_API_KEY)
         config = FaceConfig(identify_faces=True)
+        print("trying to connect")
         async with client.connect([config]) as socket:
             print("(Connected to Hume API!)")
             while reader < counter:
@@ -146,6 +119,8 @@ async def webcam_loop():
     except HumeClientException:
         print(traceback.format_exc())
         webcam_event.set()
+        reader = counter
     except Exception:
         print(traceback.format_exc())
         webcam_event.set()
+        reader = counter
