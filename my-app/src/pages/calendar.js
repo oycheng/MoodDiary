@@ -3,28 +3,19 @@ import '../global.css';
 import '../pages/calendar.css';
 import { useState } from 'react';
 import Calendar from 'react-calendar';
-import { addDays, differenceInCalendarDays } from 'date-fns';
+import moment from 'moment';
 
-const now = new Date();
-const tomorrow = addDays(now, 1);
-const in3Days = addDays(now, 3);
-const in5Days = addDays(now, 5);
-
-const highlightedDates = [tomorrow, in3Days, in5Days];
-
-function isSameDay(a, b) {
-	return differenceInCalendarDays(a, b) === 0;
-}
+const dict = {'06-16-2023' : 'red', '06-13-2023' : 'yellow', '06-23-2023' : 'blue', '07-20-2023' : 'red',
+				'06-01-2023' : 'yellow', '06-20-2023' : 'red'};
 
 const Calendr = () => {
 	const [date, setDate] = useState(new Date());
 	
 	function tileClassName({ date, view }) {
+		var dateConv = moment(date).format('MM-DD-YYYY');
 		if (
-		view === 'month' &&
-		highlightedDates.find((dDate) => isSameDay(dDate, date))
-		) {
-			return 'highlight';
+		view === 'month' && dict.hasOwnProperty(dateConv)) {
+			return dict[dateConv];
 		}
 	}
 	return (
