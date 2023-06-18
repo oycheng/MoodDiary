@@ -1,6 +1,8 @@
 import openai
 import numpy as np
 import re
+import json
+import os
 
 openai.api_key = "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"
 
@@ -82,7 +84,13 @@ def message(transcription):
     user_emotions = find_emotion(user_sorted_values)
     print(user_emotions[0:3])
 
-
+    # load conversation
+    if os.path.exists("./conversation.json"):
+        with open("./conversation.json", "r") as file:
+            conversation = json.load(file)
+            print("Conversation loaded from conversation.json")
+    else:
+        conversation = []
     
     message = create_message(transcription, user_emotions)
     conversation.append({"role": "user", "content": message})
@@ -90,6 +98,13 @@ def message(transcription):
     completion = openai.ChatCompletion.create(model="gpt-4", messages=conversation)
     response = completion.choices[0]['message']['content']
     conversation.append({"role": "assistant", "content": response})
+
+    # save the conversation
+    with open("./conversation.json", "w") as file:
+        json.dump(conversation, file)
+        print("Conversation saved")
+    
+    # clean up response
     response = re.sub(r'\([^)]*\)', '', response)
     response = re.sub(r'\[.*?\]', '', response)
     response = re.sub(r'^"|"$', '', response)
