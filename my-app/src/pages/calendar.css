@@ -84,10 +84,58 @@ text-decoration: none;
     background-color: blue;
 }
 
-.react-calendar .red {
-    background-color: red;
+.react-calendar .white {
+    background-color: white;
+}
+
+.react-calendar .pink {
+    background-color: pink;
 }
 
 .react-calendar .yellow{
     background-color: yellow;
+}
+
+.react-calendar .red{
+    background-color: red;
+}
+
+.react-calendar .purple{
+    background-color: purple;
+}
+
+.react-calendar .lightblue{
+    background-color: lightblue;
+}
+
+.react-calendar .brown{
+    background-color: brown;
+}
+
+.react-calendar .orange{
+    background-color: orange;
+}
+
+.react-calendar .green{
+    background-color: green;
+}
+
+.react-calendar .tan{
+    background-color: #bd975b;
+}
+
+.react-calendar .lightpurple{
+    background-color: #a434eb;
+}
+
+.react-calendar .maroon{
+    background-color: maroon;
+}
+
+.react-calendar .black{
+    background-color: black;
+}
+
+.react-calendar .primary{
+    background-color: #e84d28;
 }
