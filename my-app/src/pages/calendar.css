@@ -89,3 +89,7 @@ text-decoration: none;
         max-width: initial !important;
     }
 }
+
+.react-calendar .highlight {
+    background-color: red;
+}
