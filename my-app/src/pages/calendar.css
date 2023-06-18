@@ -80,6 +80,10 @@ text-decoration: none;
     }
 }
 
+.react-calendar .blue {
+    background-color: blue;
+}
+
 .react-calendar .white {
     background-color: white;
 }
