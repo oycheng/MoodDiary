@@ -66,7 +66,6 @@ def process_prediction(predictions):
 
 def find_emotion(predictions):   
     if len(predictions) == 0:
-        print("BEEN  hereDD")
         return ["calm", "bored"]
     sorted_emotions = []
     for emotion, value in predictions:
@@ -81,7 +80,7 @@ def message(transcription):
     user_sorted_values = process_prediction(emotion_history)
 
     user_emotions = find_emotion(user_sorted_values)
-    print(user_emotions)
+    print(user_emotions[0:3])
 
 
     
