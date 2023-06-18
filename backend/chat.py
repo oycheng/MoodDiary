@@ -7,7 +7,7 @@ from datetime import datetime
 
 day = 18
 
-openai.api_key = "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"
+openai.api_key = ""
 
 SYSTEM_INSTUCTIONS = """You are a emotion journal AI assistant.
 Your goal is to give the user advice on their issues and help them get into a better mental state.
