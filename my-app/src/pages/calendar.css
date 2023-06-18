@@ -69,7 +69,7 @@ text-decoration: none;
 
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-    background: #6f48eb;
+    background: #9579ab;
     color: white;
 }
    
