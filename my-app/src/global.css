@@ -5,8 +5,41 @@
 	background: none;
 
 }
+
+/* global css variables */
+@media (prefers-color-scheme: light) {
+    html {
+		--admiring: white;
+		--adoring: pink;
+		--appreciative: white; 
+		--amused: yellow;
+		--angry: red;
+		--anxious: purple;
+		--awestruck: light blue;
+		--uncomfortable: white;  
+		--bored: brown;
+		--calm: light blue;
+    	--focused: white;  
+		--contemplative: white; 
+		--confused: orange; 
+		--contemptuous: white; 
+		--content-hungry-determined-disappointed-distressed-euphoric-embarrassed-disturbed-entranced-envious-excited-guilty-horrified-interested-happy-enamored-nostalgic-proud-inspired-relieved-smitten-satisfied-desirous-ashamed-positivelysurprised-sympathetic-triumphant: white;
+    	--disgusted: green; 
+		--doubtful: #bd975b; 
+    	--fearful: #a434eb;
+		 
+		--pained: maroon;  
+		--sad: dark blue; 
+		--negatively-surprised: green;
+		
+		--tired: black; 
+        --primary: #E84D28;
+        
+    }
+}
+
 h1{
-	padding-top: 200px;
+	padding-top: 100px;
 	font-size: 5rem;
 	text-align: center;
 	color: #6f439c;
@@ -25,10 +58,19 @@ h2{
 }
 
 h3{
+	overflow-wrap: break-word;
 	text-align: center;
   	align-items: center;
 	text-align: center;
-	margin: 20px;
-	padding-left: 20px;
-	padding-right: 20px;
+	margin: 0px 20px;
+	width: 100%;
+}
+
+.recbut {
+    height: auto;
+	margin: 30px 20px;
+    padding: 16px 24px;
+    border-radius: 12px;
+	justify-content: space-between;
+	color: purple;
 }

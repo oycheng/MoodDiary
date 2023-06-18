@@ -51,8 +51,11 @@ async def get_transcription():
         audio = request.files['audio']
         audio.save('./temp_file/audio.mp3')
         
+
         audio_file= open("./temp_file/audio.mp3", "rb")
+        print("getting transcription")
         transcription = openai.Audio.transcribe("whisper-1", audio_file)
+        print("got transcription")
         print(transcription)
 
         response = message(transcription["text"])
