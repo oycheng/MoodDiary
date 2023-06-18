@@ -3,6 +3,10 @@ from chat import message, store_emotions
 from hume import HumeStreamClient, HumeClientException
 from hume.models.config import FaceConfig
 import openai
+import asyncio
+import threading
+import cv2
+import traceback
 
 
 HUME_API_KEY = "ad0LmsBJyv0WpfTi8GSkvrhH4ryFLcqK2YJHH9KG6pDtzMfz"
@@ -13,13 +17,14 @@ bp = Blueprint('chat', __name__)
 # route for Final version prediction
 @bp.route('/process-frame-result', methods=['POST'])
 def process_frame_result():
-    global results
+    global results, counter
     try:
         print(type(request))
         frame_jpg = request.files['frame_jpg']
-        results.append(frame_jpg)
+        frame_jpg.save("./temp_file/" + str(counter) + "_" + TEMP_FILE)
+        counter += 1
 
-        print("emotions stored:")
+        print("emotions saved:")
 
         # unpack the request
         response_data = {}
@@ -32,31 +37,26 @@ def process_frame_result():
         # Handle other exceptions
         return f'Internal server error: {e}', 500
 
+webcam_event = asyncio.Event()
 
 @bp.route('/transcription', methods=['POST'])
-def get_transcription():
+async def get_transcription():
     try:
-        print(type(request))
+        await asyncio.ensure_future(webcam_loop())
+        await webcam_event.wait()
+
         if 'audio' not in request.files:
             return 'No audio file found', 400
         
         audio = request.files['audio']
         audio.save('./temp_file/audio.mp3')
         
-        print("here")
         audio_file= open("./temp_file/audio.mp3", "rb")
-        print("probaly not be here")
         transcription = openai.Audio.transcribe("whisper-1", audio_file)
-        print("must be here")
         print(transcription)
-        print(transcription["text"])
 
-        end_processing()
-        print("will it be here")
         response = message(transcription["text"])
-        print("or maybe be here")
         print(response)
-        print("??")
         
         return jsonify(response)
     # exception
@@ -76,7 +76,6 @@ async def start_processing():
 
         results = []
         running = True
-        await imageProcessor()
         return jsonify("started")
     # exception
     except KeyError as e:
@@ -96,23 +95,30 @@ def end_processing():
     running = False
     return
 
-async def imageProcessor():
-    global results, running
-    client = HumeStreamClient(HUME_API_KEY)
-    config = FaceConfig(identify_faces=True)
-    async with client.connect([config]) as socket:
-        print("(Connected to Hume API!)")
-        while len(results) != 0:
-            result = await socket.send_file(results[0])
-            store_emotions(result)
-            results.pop(0)
-            print("emotions append:")
 
-            if len(results) == 0 and not running:
-                return
+TEMP_FILE = 'temp.jpg'
+counter = 0
+reader = 5
 
-def waitForFrameProcess():
-    global results, running
-    while True:
-        if len(results) == 0 and not running:
-            return
+async def webcam_loop():
+    global counter, reader
+    print("called")
+    try:
+        webcam_event.clear()
+        client = HumeStreamClient(HUME_API_KEY)
+        config = FaceConfig(identify_faces=True)
+        async with client.connect([config]) as socket:
+            print("(Connected to Hume API!)")
+            while reader < counter:
+                result = await socket.send_file("./temp_file/" + str(reader) + "_" + TEMP_FILE)
+                store_emotions(result)
+                reader += 1
+                print("emotions append:")
+
+            webcam_event.set()
+    except HumeClientException:
+        print(traceback.format_exc())
+        webcam_event.set()
+    except Exception:
+        print(traceback.format_exc())
+        webcam_event.set()

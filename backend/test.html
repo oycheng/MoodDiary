@@ -16,21 +16,21 @@
       let terminateFunction;
       setUpAudio();
 
+      // Video
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          // Set the video source to the stream
+          videoElement.srcObject = stream;
+        })
+        .catch((error) => {
+          console.error("Error accessing the camera: ", error);
+        });
+
       function startStream() {
         mediaRecorder.start();
         console.log(mediaRecorder.state);
         console.log("recorder started");
-
-        // Video
-        navigator.mediaDevices
-          .getUserMedia({ video: true })
-          .then((stream) => {
-            // Set the video source to the stream
-            videoElement.srcObject = stream;
-          })
-          .catch((error) => {
-            console.error("Error accessing the camera: ", error);
-          });
 
         terminateFunction = startCaptureFrame();
       }
@@ -147,15 +147,6 @@
               sendAudio(blob);
 
               recordedChunks = [];
-              //   const audioURL = window.URL.createObjectURL(blob);
-
-              //   console.log("recorder stopped");
-              //   const downloadLink = document.createElement("a");
-              //   downloadLink.href = audioURL;
-              //   downloadLink.download = "audio_file.mp3"; // Set the desired file name and extension
-
-              //   // Trigger the click event to start the download
-              //   downloadLink.click();
               console.log("download");
             };
 

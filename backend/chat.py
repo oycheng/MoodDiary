@@ -51,6 +51,7 @@ def process_prediction(predictions):
         if 'predictions' not in frame_dict['face']:
             continue
         frame_emo_dict = frame_dict['face']["predictions"][0]["emotions"]
+        print(frame_emo_dict)
         emo_dict = {x["name"]: x["score"] for x in frame_emo_dict}
         emo_frame = sorted(emo_dict.items())
         emo_frame = np.array([x[1] for x in emo_frame])
@@ -66,10 +67,14 @@ def process_prediction(predictions):
 
 def find_emotion(predictions):   
     if len(predictions) == 0:
+        print("BEEN  hereDD")
         return ["calm", "bored"]
     sorted_emotions = []
-    for emotion, value in predictions:
+    print("BEEN  here1")
+    print(predictions)
+    for emotion, value in predictions.items():
         sorted_emotions.append(f"{get_adjective(value)} {emotion}")
+        print("BEEN  here2")
     return sorted_emotions
 
 def store_emotions(result):
@@ -77,13 +82,18 @@ def store_emotions(result):
 
 def message(transcription):
     global emotion_history
+    print("!  here")
     user_sorted_values = process_prediction(emotion_history)
 
+    print("OR  here")
     user_emotions = find_emotion(user_sorted_values)
+    print(user_emotions)
+
 
     
-
+    print("BEEN  here")
     message = create_message(transcription, user_emotions)
+    print("AND  here")
     conversation.append({"role": "user", "content": message})
     # completion = openai.ChatCompletion.create(model="gpt-4", messages=conversation)
     # response = completion.choices[0]['message']['content']
@@ -94,5 +104,5 @@ def message(transcription):
     response = re.sub(r'^"|"$', '', response)
     emotion_history = []
     
-    return user_emotions
+    print(response)
     return response
