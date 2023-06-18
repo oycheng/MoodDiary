@@ -3,7 +3,7 @@ import React from 'react';
 const Contact = () => {
 	return (
 		<div>
-			<h3>Emily Ng, Orien Cheng, HongHui</h3>
+			<h3>I hate everyone don't contact me. :)</h3>
 		</div>
 	);
 };
