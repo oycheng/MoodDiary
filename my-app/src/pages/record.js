@@ -17,8 +17,8 @@ const Record = () => {
       <h2>
         <video id="videoElement" autoPlay></video>
 		<div>
-			<button onClick={startRecordingHandler}>Start Recording</button>
-			<button onClick={stopRecordingHandler}>Stop Recording and Send</button>
+			<button className="recbut" onClick={startRecordingHandler}>Start Recording</button>
+			<button className="recbut" onClick={stopRecordingHandler}>Stop Recording and Send</button>
 		</div>
 	</h2>
       <script src="recordFunctions.js"></script>

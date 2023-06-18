@@ -65,3 +65,13 @@ h3{
 	margin: 0px 20px;
 	width: 100%;
 }
+
+.recbut {
+    height: auto;
+	margin: 30px 20px;
+    padding: 16px 24px;
+    border-radius: 12px;
+	justify-content: space-between;
+	color: purple;
+
+}
