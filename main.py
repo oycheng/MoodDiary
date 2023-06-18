@@ -9,7 +9,7 @@ import numpy as np
 
 from pynput import keyboard
 from pvrecorder import PvRecorder
-from whispercpp import Whisper
+# from whispercpp import Whisper
 from chat import message, store_emotions
 from playsound import playsound
 from hume import HumeStreamClient, HumeClientException
@@ -24,12 +24,10 @@ TEMP_FILE = 'temp.jpg'
 TEMP_WAV_FILE = 'temp.wav'
 
 # Initialize whisper model, pyttsx3 engine, and pv recorder
-w = Whisper.from_pretrained("tiny.en")
-recorder = PvRecorder(device_index=-1, frame_length=512)
+# w = Whisper.from_pretrained("tiny.en")
 
 # Global variables
 recording = False
-recording_data = []
 
 # Webcam setup
 cam = cv2.VideoCapture(0)
@@ -44,11 +42,19 @@ async def webcam_loop():
                 print("(Connected to Hume API!)")
                 while True:
                     if not recording:
-                        _, frame = cam.read()
+                        # Capture frame-by-frame
+                        ret, frame = cam.read()
+
+                        if not ret:
+                            print("Failed to capture frame from camera")
+                            break
+
                         cv2.imwrite(TEMP_FILE, frame)
                         result = await socket.send_file(TEMP_FILE)
+                        print(result)
                         store_emotions(result)
-                        await asyncio.sleep(1 / 3)
+                        print("emotions stored:")
+                        await asyncio.sleep(3)
         except websockets.exceptions.ConnectionClosedError:
             print("Connection lost. Attempting to reconnect in 1 seconds.")
             time.sleep(1)
@@ -63,36 +69,26 @@ def start_asyncio_event_loop(loop, asyncio_function):
     asyncio.set_event_loop(loop)
     loop.run_until_complete(asyncio_function)
 
-
-def recording_loop():
-    global recording_data, recording
-    while recording:
-        frame = recorder.read()
-        recording_data.append(frame)
-
-    recorder.stop()
-    print("(Recording stopped...)")
-
-    recording_data = np.hstack(recording_data).astype(np.int16).flatten().astype(np.float32) / 32768.0
-    transcription = w.transcribe(recording_data)
-    response = message(transcription)
-    tts = gTTS(text=response, lang='en')
-    tts.save(TEMP_WAV_FILE)
-    playsound(TEMP_WAV_FILE)
-    os.remove(TEMP_WAV_FILE)
-
-
+printed = False
 def on_press(key):
-    global recording, recording_data, recorder
+    global recording, printed
     if key == keyboard.Key.space:
+        print("key pressed")
         if recording:
             recording = False
+            printed = False
         else:
             recording = True
-            recording_data = []
-            recorder.start()
-            print("(Recording started...)")
-            threading.Thread(target=recording_loop).start()
+            if not printed:
+                printed = True
+                try:
+                    res = message("none")
+                    print(res)
+                except Exception as e:
+                    # Exception handling code
+                    print("An exception occurred:", type(e).__name__)
+                    traceback.print_exc()
+                print("printed===")
 
 
 new_loop = asyncio.new_event_loop()
