@@ -98,7 +98,7 @@ def end_processing():
 
 TEMP_FILE = 'temp.jpg'
 counter = 0
-reader = 5
+reader = 0
 
 async def webcam_loop():
     global counter, reader

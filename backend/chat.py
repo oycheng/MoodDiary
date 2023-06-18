@@ -71,8 +71,9 @@ def find_emotion(predictions):
         return ["calm", "bored"]
     sorted_emotions = []
     print("BEEN  here1")
-    print(predictions)
-    for emotion, value in predictions.items():
+    print(len(predictions))
+    for emotion, value in predictions:
+        print("BEEN  here1.5")
         sorted_emotions.append(f"{get_adjective(value)} {emotion}")
         print("BEEN  here2")
     return sorted_emotions
@@ -95,14 +96,12 @@ def message(transcription):
     message = create_message(transcription, user_emotions)
     print("AND  here")
     conversation.append({"role": "user", "content": message})
-    # completion = openai.ChatCompletion.create(model="gpt-4", messages=conversation)
-    # response = completion.choices[0]['message']['content']
-    response = "none"
+    completion = openai.ChatCompletion.create(model="gpt-4", messages=conversation)
+    response = completion.choices[0]['message']['content']
     conversation.append({"role": "assistant", "content": response})
     response = re.sub(r'\([^)]*\)', '', response)
     response = re.sub(r'\[.*?\]', '', response)
     response = re.sub(r'^"|"$', '', response)
     emotion_history = []
     
-    print(response)
     return response
